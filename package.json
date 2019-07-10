@@ -2,7 +2,9 @@
   "name": "vscode-windows-registry",
   "version": "1.0.1",
   "description": "A native node module for accessing the windows registry",
-  "os": ["win32"],
+  "os": [
+    "win32"
+  ],
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
@@ -27,6 +29,6 @@
     "typescript": "^3.3.3"
   },
   "dependencies": {
-    "nan": "^2.12.1"
+    "nan": "^2.14.0"
   }
 }
