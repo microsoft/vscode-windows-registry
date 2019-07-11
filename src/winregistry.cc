@@ -60,9 +60,9 @@ namespace {
 			return;
 		}
 
-		HKEY hive = GetHive(std::string(*Nan::Utf8String(args[0]->ToString())));
-		std::string path = std::string(*Nan::Utf8String(args[1]->ToString()));
-		std::string name = std::string(*Nan::Utf8String(args[2]->ToString()));
+		HKEY hive = GetHive(*Nan::Utf8String(args[0]));
+		std::string path = *Nan::Utf8String(args[1]);
+		std::string name = *Nan::Utf8String(args[2]);
     std::string result = "";
 
     HKEY hKey;
