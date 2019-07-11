@@ -1,4 +1,4 @@
-import { GetStringRegKey } from '../dist/index';
+import { GetStringRegKey } from '../index';
 import * as assert from 'assert';
 
 describe('Windows Registry Tests', () => {

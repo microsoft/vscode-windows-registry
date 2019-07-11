@@ -7,3 +7,4 @@ npm-debug.log
 yarn-error.log
 tsconfig.json
 yarn.lock
+*.test.ts
