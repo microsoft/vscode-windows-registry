@@ -1,8 +1,0 @@
-trigger:
-- master
-
-jobs:
-- template: build-template.yml
-  parameters:
-    name: Windows
-    vmImage: 'vs2017-win2016'
