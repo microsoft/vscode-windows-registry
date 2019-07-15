@@ -62,7 +62,7 @@ namespace {
 
 		HKEY hKey;
 		if (ERROR_SUCCESS != RegOpenKeyEx(hive, path.c_str(), 0, KEY_READ, &hKey)) {
-			napi_throw_error(env, "EINVAL", "Unable to open registry key");
+			napi_throw_error(env, NULL, "Unable to open registry key");
 			return NULL;
 		}
 
