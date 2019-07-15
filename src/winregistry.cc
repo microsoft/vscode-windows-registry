@@ -3,21 +3,9 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-#include <nan.h>
-
 #include <string>
-#include <node.h>
 #include <windows.h>
-
-using v8::Exception;
-using v8::FunctionCallbackInfo;
-using v8::NewStringType;
-using v8::Isolate;
-using v8::Local;
-using v8::Object;
-using v8::String;
-using v8::Array;
-using v8::Value;
+#include <node_api.h>
 
 namespace {
 
@@ -45,48 +33,61 @@ namespace {
 		return NULL;
 	}
 
-  void GetStringRegKey(const FunctionCallbackInfo<Value>& args) {
-		Isolate* isolate = args.GetIsolate();
+	napi_value GetStringRegKey(napi_env env, napi_callback_info info) {
+		napi_value argv[3];
+		size_t argc = 3;
 
-		// Check that we have 2 arguments - Hive, Path, Name
-		if (args.Length() != 3) {
-			Nan::ThrowError("Wrong number of arguments");
-			return;
+		napi_get_cb_info(env, info, &argc, argv, NULL, NULL);
+
+		// Check that we have 3 arguments - Hive, Path, Name
+		if (argc < 3) {
+			napi_throw_error(env, "EINVAL", "Wrong number of arguments");
+			return NULL;
 		}
 
-		// Check that arguments are properly typed
-		if (!args[0]->IsString() || !args[1]->IsString() || !args[2]->IsString()) {
-			Nan::ThrowTypeError("Wrong argument types");
-			return;
+		// Retrieve the 3 arguments
+		size_t str_len;
+		char arg1[1024], arg2[1024], arg3[1024];
+		for (int i = 0; i < 3; i++) {
+			if (napi_get_value_string_utf8(env, argv[i], i == 0 ? (char *)&arg1 : i == 1 ? (char *)&arg2 : (char *)arg3, 1024, &str_len) != napi_ok) {
+				napi_throw_error(env, "EINVAL", "Expected string");
+				return NULL;
+			}
 		}
 
-		HKEY hive = GetHive(std::string(*Nan::Utf8String(args[0]->ToString())));
-		std::string path = std::string(*Nan::Utf8String(args[1]->ToString()));
-		std::string name = std::string(*Nan::Utf8String(args[2]->ToString()));
-    std::string result = "";
+		HKEY hive = GetHive(std::string(arg1));
+		std::string path = std::string(arg2);
+		std::string name = std::string(arg3);
+    	std::string result = "";
 
-    HKEY hKey;
-    if (ERROR_SUCCESS != RegOpenKeyEx(hive, path.c_str(), 0, KEY_READ, &hKey)) {
-      Nan::ThrowError("Unable to open registry key");
-			return;
-    }
+		HKEY hKey;
+		if (ERROR_SUCCESS != RegOpenKeyEx(hive, path.c_str(), 0, KEY_READ, &hKey)) {
+			napi_throw_error(env, "EINVAL", "Unable to open registry key");
+			return NULL;
+		}
 
-    char szBuffer[512];
-    DWORD dwBufferSize = sizeof(szBuffer);
+		char szBuffer[512];
+		DWORD dwBufferSize = sizeof(szBuffer);
 
-    if (ERROR_SUCCESS == RegQueryValueEx(hKey, name.c_str(), 0, NULL, (LPBYTE)szBuffer, &dwBufferSize)) {
-      result = szBuffer;
-    }
+		if (ERROR_SUCCESS == RegQueryValueEx(hKey, name.c_str(), 0, NULL, (LPBYTE)szBuffer, &dwBufferSize)) {
+			result = szBuffer;
+		}
 
-    RegCloseKey(hKey);
+    	RegCloseKey(hKey);
 
-		Local<String> res = Nan::New<v8::String>(result.c_str()).ToLocalChecked();
-    args.GetReturnValue().Set(res);
-  }
+		napi_value napi_result;
+		napi_create_string_utf8(env, result.c_str(), NAPI_AUTO_LENGTH, &napi_result);
 
-	void init(Local<Object> exports) {
-		NODE_SET_METHOD(exports, "GetStringRegKey", GetStringRegKey);
+		return napi_result;
 	}
 
-	NODE_MODULE(addon, init)
+	napi_value Init(napi_env env, napi_value exports) {
+		napi_value getStringRegKey;
+		napi_create_function(env, "GetStringRegKey", NAPI_AUTO_LENGTH, GetStringRegKey, NULL, &getStringRegKey);
+		napi_set_named_property(env, exports, "GetStringRegKey", getStringRegKey);
+
+		return exports;
+	}
+
+	NAPI_MODULE(NODE_GYP_MODULE_NAME, Init);
 }
