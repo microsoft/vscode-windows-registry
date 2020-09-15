@@ -58,16 +58,29 @@ napi_value GetStringRegKey(napi_env env, napi_callback_info info) {
   }
 
   size_t str_len = 0;
+  const int MAX_LEN = 16383;
 
   napi_get_value_string_utf8(env, argv[0], nullptr, 0, &str_len);
+  if (str_len + 1 > MAX_LEN) {
+    napi_throw_error(env, "EINVAL", "Arguments too long");
+  }
+
   char *arg1 = reinterpret_cast<char *>(malloc(str_len + 1));
   napi_get_value_string_utf8(env, argv[0], arg1, str_len + 1, nullptr);
 
   napi_get_value_string_utf8(env, argv[1], nullptr, 0, &str_len);
+  if (str_len + 1 > MAX_LEN) {
+    napi_throw_error(env, "EINVAL", "Arguments too long");
+  }
+
   char *arg2 = reinterpret_cast<char *>(malloc(str_len + 1));
   napi_get_value_string_utf8(env, argv[1], arg2, str_len + 1, nullptr);
 
   napi_get_value_string_utf8(env, argv[2], nullptr, 0, &str_len);
+  if (str_len + 1 > MAX_LEN) {
+    napi_throw_error(env, "EINVAL", "Arguments too long");
+  }
+
   char *arg3 = reinterpret_cast<char *>(malloc(str_len + 1));
   napi_get_value_string_utf8(env, argv[2], arg3, str_len + 1, nullptr);
 

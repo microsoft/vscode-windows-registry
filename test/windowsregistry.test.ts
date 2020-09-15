@@ -18,5 +18,27 @@ describe('Windows Registry Tests', () => {
 			assert.throws(() => ((<any>GetStringRegKey)('HKEY_LOCAL_MACHINE')));
 			assert.throws(() => ((<any>GetStringRegKey)('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft\\Windows\\CurrentVersion')));
 		});
+
+		it('Validates argument length', () => {
+			let reallyLongString = 'areallystring';
+			while (reallyLongString.length < 17000) {
+				reallyLongString += reallyLongString;
+			}
+
+			assert.throws(() => ((<any>GetStringRegKey)(
+				reallyLongString,
+				'SOFTWARE\\Microsoft\\Windows\\CurrentVersion',
+				'ProgramFilesPath')));
+
+			assert.throws(() => ((<any>GetStringRegKey)(
+				'HKEY_LOCAL_MACHINE',
+				reallyLongString,
+				'ProgramFilesPath')));
+
+			assert.throws(() => ((<any>GetStringRegKey)(
+				'HKEY_LOCAL_MACHINE',
+				'SOFTWARE\\Microsoft\\Windows\\CurrentVersion',
+				reallyLongString)));
+		});
 	});
 });
