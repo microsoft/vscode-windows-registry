@@ -66,6 +66,9 @@ napi_value GetStringRegKey(napi_env env, napi_callback_info info) {
   }
 
   char *arg1 = reinterpret_cast<char *>(malloc(str_len + 1));
+  if (arg1 == nullptr) {
+    return nullptr;
+  }
   napi_get_value_string_utf8(env, argv[0], arg1, str_len + 1, nullptr);
 
   napi_get_value_string_utf8(env, argv[1], nullptr, 0, &str_len);
@@ -74,6 +77,9 @@ napi_value GetStringRegKey(napi_env env, napi_callback_info info) {
   }
 
   char *arg2 = reinterpret_cast<char *>(malloc(str_len + 1));
+  if (arg2 == nullptr) {
+    return nullptr;
+  }
   napi_get_value_string_utf8(env, argv[1], arg2, str_len + 1, nullptr);
 
   napi_get_value_string_utf8(env, argv[2], nullptr, 0, &str_len);
@@ -82,6 +88,9 @@ napi_value GetStringRegKey(napi_env env, napi_callback_info info) {
   }
 
   char *arg3 = reinterpret_cast<char *>(malloc(str_len + 1));
+  if (arg3 == nullptr) {
+    return nullptr;
+  }
   napi_get_value_string_utf8(env, argv[2], arg3, str_len + 1, nullptr);
 
   HKEY hive = GetHive(std::string(arg1));
