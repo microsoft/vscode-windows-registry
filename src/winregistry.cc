@@ -64,40 +64,31 @@ napi_value GetStringRegKey(napi_env env, napi_callback_info info) {
   if (str_len + 1 > MAX_LEN) {
     napi_throw_error(env, "EINVAL", "Arguments too long");
   }
-
-  char *arg1 = reinterpret_cast<char *>(malloc(str_len + 1));
-  if (arg1 == nullptr) {
-    return nullptr;
-  }
-  napi_get_value_string_utf8(env, argv[0], arg1, str_len + 1, nullptr);
+  std::string hive_arg;
+  hive_arg.reserve(str_len + 1);
+  hive_arg.resize(str_len);
+  napi_get_value_string_utf8(env, argv[0], &hive_arg[0], hive_arg.capacity(), nullptr);
+  HKEY hive = GetHive(hive_arg);
 
   napi_get_value_string_utf8(env, argv[1], nullptr, 0, &str_len);
   if (str_len + 1 > MAX_LEN) {
     napi_throw_error(env, "EINVAL", "Arguments too long");
   }
-
-  char *arg2 = reinterpret_cast<char *>(malloc(str_len + 1));
-  if (arg2 == nullptr) {
-    return nullptr;
-  }
-  napi_get_value_string_utf8(env, argv[1], arg2, str_len + 1, nullptr);
+  std::string path;
+  path.reserve(str_len + 1);
+  path.resize(str_len);
+  napi_get_value_string_utf8(env, argv[1], &path[0], path.capacity(), nullptr);
 
   napi_get_value_string_utf8(env, argv[2], nullptr, 0, &str_len);
   if (str_len + 1 > MAX_LEN) {
     napi_throw_error(env, "EINVAL", "Arguments too long");
   }
+  std::string name;
+  name.reserve(str_len + 1);
+  name.resize(str_len);
+  napi_get_value_string_utf8(env, argv[2], &name[0], name.capacity(), nullptr);
 
-  char *arg3 = reinterpret_cast<char *>(malloc(str_len + 1));
-  if (arg3 == nullptr) {
-    return nullptr;
-  }
-  napi_get_value_string_utf8(env, argv[2], arg3, str_len + 1, nullptr);
-
-  HKEY hive = GetHive(std::string(arg1));
-  auto path = std::string(arg2);
-  auto name = std::string(arg3);
   std::string result;
-
   HKEY hKey;
   if (ERROR_SUCCESS != RegOpenKeyEx(hive, path.c_str(), 0, KEY_READ, &hKey)) {
     napi_throw_error(env, nullptr, "Unable to open registry key");
@@ -113,9 +104,6 @@ napi_value GetStringRegKey(napi_env env, napi_callback_info info) {
   }
 
   RegCloseKey(hKey);
-  free(arg1);
-  free(arg2);
-  free(arg3);
 
   napi_value napi_result;
   napi_create_string_utf8(env, result.c_str(), result.length(), &napi_result);
