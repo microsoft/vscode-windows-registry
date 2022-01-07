@@ -4,7 +4,7 @@ This module only has what is needed to support VS Code and is intended to be a l
 ## Installing
 
 ```sh
-npm install vscode-windows-registry
+npm install @vscode/windows-registry
 ```
 
 ## Using
