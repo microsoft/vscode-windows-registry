@@ -10,6 +10,7 @@
           'msvs_settings': {
             'VCCLCompilerTool': {
               'AdditionalOptions': [
+                '/W3',
                 '/Qspectre',
                 '/guard:cf'
               ]
