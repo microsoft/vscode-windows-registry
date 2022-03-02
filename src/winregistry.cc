@@ -87,6 +87,10 @@ napi_value GetStringRegKey(napi_env env, napi_callback_info info) {
   name.reserve(str_len + 1);
   name.resize(str_len);
   napi_get_value_string_utf8(env, argv[2], &name[0], name.capacity(), nullptr);
+  
+  if (hive == NULL) {
+    napi_throw_error(env, nullptr, "Unable to open registry hive");
+  }
 
   std::string result;
   HKEY hKey;
