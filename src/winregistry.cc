@@ -90,6 +90,7 @@ napi_value GetStringRegKey(napi_env env, napi_callback_info info) {
   
   if (hive == NULL) {
     napi_throw_error(env, nullptr, "Unable to open registry hive");
+    return nullptr;
   }
 
   std::string result;
