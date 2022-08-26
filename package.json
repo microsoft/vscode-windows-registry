@@ -7,9 +7,15 @@
   ],
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "files": [
+	"dist/index.js",
+	"dist/index.d.ts",
+	"dist/winregistry.node"
+  ],
   "scripts": {
-    "compile": "tsc -p ./",
-    "test": "mocha -r ts-node/register test/**/*.test.ts"
+	"prepublishOnly": "npm run build && npm run test",
+	"build": "[ -f binding.gyp ] && tsc -p ./ && node-gyp rebuild && cp build/Release/winregistry.node dist/",
+    "test": "[ -d test ] && mocha -r ts-node/register test/**/*.test.ts"
   },
   "repository": {
     "type": "git",

@@ -1,11 +1,14 @@
 /.vscode
-/lib
+/.github
 /build
+/lib
+/src
+/test
+
 .gitignore
 .npmignore
 npm-debug.log
 yarn-error.log
 tsconfig.json
+binding.gyp
 yarn.lock
-/test
-/.github
