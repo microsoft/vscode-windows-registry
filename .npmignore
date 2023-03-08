@@ -1,11 +1,10 @@
-/.vscode
-/lib
-/build
+.github/
+.vscode/
+azure-pipelines/
+build/
+lib/
+test/
 .gitignore
 .npmignore
-npm-debug.log
-yarn-error.log
 tsconfig.json
 yarn.lock
-/test
-/.github
