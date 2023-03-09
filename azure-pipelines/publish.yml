@@ -24,7 +24,7 @@ extends:
   template: azure-pipelines/npm-package/pipeline.yml@templates
   parameters:
     npmPackages:
-      - name: @vscode/windows-registry
+      - name: vscode-windows-registry
 
         buildSteps:
           - script: yarn --frozen-lockfile
