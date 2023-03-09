@@ -41,7 +41,11 @@ extends:
           - script: yarn --frozen-lockfile
             displayName: Install dependencies
 
+          - script: yarn compile
+            displayName: Compile
+
           - script: yarn test
-            displayName: Compile & test npm package
+            displayName: Test npm package
 
         publishPackage: ${{ parameters.publishPackage }}
+        packagePlatform: Windows
