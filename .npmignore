@@ -1,8 +1,8 @@
 .github/
 .vscode/
 azure-pipelines/
+node_modules/
 build/
-lib/
 test/
 .gitignore
 .npmignore
