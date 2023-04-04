@@ -8,7 +8,6 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "postinstall": "npm run compile",
     "compile": "tsc -p ./",
     "test": "mocha -r ts-node/register test/**/*.test.ts"
   },
