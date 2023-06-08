@@ -8,12 +8,12 @@ on:
 
 jobs:
   build:
-
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        node-version: [16.x, 17.x]
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        node-version: [16.x, 18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -23,6 +23,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
-    - run: yarn
+    - run: yarn --frozen-lockfile
     - run: yarn compile
     - run: yarn run test
