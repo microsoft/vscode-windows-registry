@@ -1,6 +1,6 @@
 {
   "name": "@vscode/windows-registry",
-  "version": "1.0.11",
+  "version": "1.1.0",
   "description": "A native node module for accessing the windows registry",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
