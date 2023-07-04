@@ -11,31 +11,28 @@ export function EnumRegKeyKeys(hive: HKEY, path: string) : string[] {
 	if (windowregistry) {
 		return windowregistry.EnumRegKeyKeys(hive, path);
 	} 
-	console.error('Could not initialize Windows Registry native node module.');
-	return [];
+	throw new Error('EnumRegKeyKeys is only available on Windows.');
 }
 
 export function EnumRegKeyValues(hive: HKEY, path: string) : string[] {
 	if (windowregistry) {
 		return windowregistry.EnumRegKeyValues(hive, path);
 	} 
-	console.error('Could not initialize Windows Registry native node module.');
-	return [];
+	throw new Error('EnumRegKeyValues is only available on Windows.');
 }
 
 export function GetStringRegKey(hive: HKEY, path: string, name: string): string | undefined {
-	if (windowregistry) {
-		return windowregistry.GetStringRegKey(hive, path, name);
+	if (windowRegistry) {
+		return windowRegistry.GetStringRegKey(hive, path, name);
 	}
-	console.error('Could not initialize Windows Registry native node module.');
-	return undefined;
+	throw new Error('GetStringRegKey is only available on Windows.');
 }
 
 export function SetStringRegKey(hive: HKEY, path: string, name: string, value: string) : void {
 	if (windowregistry) {
 		windowregistry.SetStringRegKey(hive, path, name, value);
 	} else {
-		console.error('Could not initialize Windows Registry native node module.');
+		throw new Error('SetStringRegKey is only available on Windows.');
 	}
 }
 
@@ -43,7 +40,7 @@ export function DeleteRegKeyKey(hive: HKEY, path: string, name: string) : void {
 	if (windowregistry) {
 		windowregistry.DeleteRegKeyKey(hive, path, name);
 	} else {
-		console.error('Could not initialize Windows Registry native node module.');
+		throw new Error('DeleteRegKeyKey is only available on Windows.');
 	}
 }
 
@@ -51,6 +48,6 @@ export function DeleteRegKeyValue(hive: HKEY, path: string, name: string) : void
 	if (windowregistry) {
 		windowregistry.DeleteRegKeyValue(hive, path, name);
 	} else {
-		console.error('Could not initialize Windows Registry native node module.');
+		throw new Error('DeleteRegKeyValue is only available on Windows.');
 	}
 }
