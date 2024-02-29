@@ -58,5 +58,8 @@ extends:
           - script: yarn test
             displayName: Test npm package
 
+        apiScanSoftwareName: 'vscode-windows-registry'
+        apiScanSoftwareVersion: '1.1'
+
         publishPackage: ${{ parameters.publishPackage }}
         packagePlatform: Windows
