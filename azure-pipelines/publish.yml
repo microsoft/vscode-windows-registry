@@ -38,15 +38,15 @@ extends:
         testPlatforms:
           - name: Windows
             nodeVersions:
-              - 16.x
+              - 18.x
 
           - name: macOS
             nodeVersions:
-              - 16.x
+              - 18.x
 
           - name: linux
             nodeVersions:
-              - 16.x
+              - 18.x
 
         testSteps:
           - script: yarn --frozen-lockfile
@@ -57,6 +57,9 @@ extends:
 
           - script: yarn test
             displayName: Test npm package
+
+        apiScanSoftwareName: 'vscode-windows-registry'
+        apiScanSoftwareVersion: '1.1'
 
         publishPackage: ${{ parameters.publishPackage }}
         packagePlatform: Windows
