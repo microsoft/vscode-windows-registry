@@ -38,15 +38,15 @@ extends:
         testPlatforms:
           - name: Windows
             nodeVersions:
-              - 18.x
+              - 22.x
 
           - name: macOS
             nodeVersions:
-              - 18.x
+              - 22.x
 
           - name: linux
             nodeVersions:
-              - 18.x
+              - 22.x
 
         testSteps:
           - script: yarn --frozen-lockfile
