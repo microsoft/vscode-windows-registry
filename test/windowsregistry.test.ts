@@ -15,9 +15,9 @@ describe('Windows Registry Tests', () => {
 			});
 
 			it('Validates argument count', () => {
-				assert.throws(() => (<any>GetStringRegKey)());
-				assert.throws(() => ((<any>GetStringRegKey)('HKEY_LOCAL_MACHINE')));
-				assert.throws(() => ((<any>GetStringRegKey)('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft\\Windows\\CurrentVersion')));
+				assert.throws(() => (GetStringRegKey as any)());
+				assert.throws(() => ((GetStringRegKey as any)('HKEY_LOCAL_MACHINE')));
+				assert.throws(() => ((GetStringRegKey as any)('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft\\Windows\\CurrentVersion')));
 			});
 
 			it('Validates argument length', () => {
@@ -26,17 +26,17 @@ describe('Windows Registry Tests', () => {
 					reallyLongString += reallyLongString;
 				}
 
-				assert.throws(() => ((<any>GetStringRegKey)(
+				assert.throws(() => ((GetStringRegKey as any)(
 					reallyLongString,
 					'SOFTWARE\\Microsoft\\Windows\\CurrentVersion',
 					'ProgramFilesPath')));
 
-				assert.throws(() => ((<any>GetStringRegKey)(
+				assert.throws(() => (GetStringRegKey(
 					'HKEY_LOCAL_MACHINE',
 					reallyLongString,
 					'ProgramFilesPath')));
 
-				assert.throws(() => ((<any>GetStringRegKey)(
+				assert.throws(() => (GetStringRegKey(
 					'HKEY_LOCAL_MACHINE',
 					'SOFTWARE\\Microsoft\\Windows\\CurrentVersion',
 					reallyLongString)));
