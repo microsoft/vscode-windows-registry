@@ -10,7 +10,7 @@ npm install @vscode/windows-registry
 ## Using
 
 ```javascript
-var vsWinReg = require('vscode-windows-registry');
+var vsWinReg = require('@vscode/windows-registry');
 console.log(vsWinReg.GetStringRegKey('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft\\Windows\\CurrentVersion', 'ProgramFilesPath'));
 ```
 
