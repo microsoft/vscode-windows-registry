@@ -16,8 +16,8 @@ console.log(vsWinReg.GetStringRegKey('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft\
 
 ## Development
  * `npm install`
- * `npm run node-gyp configure`
- * `npm run node-gyp build`
+ * `npx node-gyp configure`
+ * `npx node-gyp build`
  * `npm run compile`
  * `npm test`
 
