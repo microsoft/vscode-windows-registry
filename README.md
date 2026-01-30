@@ -15,11 +15,9 @@ console.log(vsWinReg.GetStringRegKey('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft\
 ```
 
 ## Development
- * `yarn`
- * `yarn node-gyp configure`
- * `yarn node-gyp build`
- * `yarn tsc`
- * `yarn test`
+ * `npm install`
+ * `npm run compile`
+ * `npm test`
 
 ## License
 [MIT](https://github.com/Microsoft/vscode-windows-registry/blob/master/License.txt)

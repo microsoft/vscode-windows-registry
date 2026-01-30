@@ -27,13 +27,13 @@ extends:
       - name: vscode-windows-registry
 
         buildSteps:
-          - script: yarn --frozen-lockfile
+          - script: npm ci
             displayName: Install dependencies
 
-          - script: yarn compile
+          - script: npm run compile
             displayName: Compile
 
-          # the rest of the build steps are part of the 'prepack' script, automatically run when the pipeline invokes 'yarn pack'
+          # the rest of the build steps are part of the 'prepack' script, automatically run when the pipeline invokes 'npm pack'
 
         testPlatforms:
           - name: Windows
@@ -49,13 +49,13 @@ extends:
               - 22.x
 
         testSteps:
-          - script: yarn --frozen-lockfile
+          - script: npm ci
             displayName: Install dependencies
 
-          - script: yarn compile
+          - script: npm run compile
             displayName: Compile
 
-          - script: yarn test
+          - script: npm test
             displayName: Test npm package
 
         apiScanSoftwareName: 'vscode-windows-registry'
