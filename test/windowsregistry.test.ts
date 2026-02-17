@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { GetStringRegKey } from '../dist/index';
+import { GetStringRegKey, GetDWORDRegKey } from '../dist/index';
 import * as assert from 'assert';
 
 describe('Windows Registry Tests', () => {
@@ -42,10 +42,33 @@ describe('Windows Registry Tests', () => {
 					reallyLongString)));
 			});
 		});
+		describe('@GetDWORDRegKey', () => {
+			it('Retrieves a DWORD registry value', () => {
+				const result = GetDWORDRegKey('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion', 'InstallDate');
+				assert(result === undefined || typeof result === 'number');
+			});
+
+			it('Returns undefined for non-existent value', () => {
+				const result = GetDWORDRegKey('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft\\Windows\\CurrentVersion', 'NonExistentDWORDValue12345');
+				assert(result === undefined);
+			});
+
+			it('Validates argument count', () => {
+				assert.throws(() => (GetDWORDRegKey as any)());
+				assert.throws(() => ((GetDWORDRegKey as any)('HKEY_LOCAL_MACHINE')));
+				assert.throws(() => ((GetDWORDRegKey as any)('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft\\Windows\\CurrentVersion')));
+			});
+		});
 	} else {
 		describe('@GetStringRegKey', () => {
 			it('Throws an error when not on Windows', () => {
 				assert.throws(() => GetStringRegKey('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft\\Windows\\CurrentVersion', 'ProgramFilesPath'));
+			});
+		});
+
+		describe('@GetDWORDRegKey', () => {
+			it('Throws an error when not on Windows', () => {
+				assert.throws(() => GetDWORDRegKey('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft\\Windows\\CurrentVersion', 'SomeValue'));
 			});
 		});
 	}
