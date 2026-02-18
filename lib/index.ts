@@ -14,3 +14,11 @@ export function GetStringRegKey(hive: HKEY, path: string, name: string): string 
 
 	throw new Error('GetStringRegKey is only available on Windows.');
 }
+
+export function GetDWORDRegKey(hive: HKEY, path: string, name: string): number | undefined {
+	if (windowRegistry) {
+		return windowRegistry.GetDWORDRegKey(hive, path, name);
+	}
+
+	throw new Error('GetDWORDRegKey is only available on Windows.');
+}
