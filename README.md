@@ -1,3 +1,60 @@
+**Changes in the fork:**
+- Added `node-gyp-build` and `prebuildify` to include prebuilds in the library
+- Specified fixed NAPI version
+
+**How to update:**
+1. When `@vscode/windows-registry` has a new version
+2. Create a new branch from `main`
+   ```sh
+   git checkout -b sync-upstream-v1.2.3
+   ```
+3. Merge the new released tag and resolve conflicts
+   ```sh
+   git fetch upstream --tags
+   git merge v1.2.3
+   ```
+4. Rebuild TS
+   ```sh
+   npm run compile
+   ```
+5. Rebuild binaries on **Windows x64**
+   ```sh
+   npm run prebuild-package
+   ```
+6. Create PR, merge
+7. Add a new tag with the "prebuild" suffix `v1.2.3-prebuild`
+
+**How to install build tools (if not installed with Node.js):**
+1. Install **Python** (adjust version to the latest if needed)
+    ```sh
+    winget install Python.Python.3.14
+    ```
+    or via **Python Install Manager** for better Python version management
+    ```sh
+    winget install Python.PythonInstallManager
+    py install 3
+    ```
+1. Install **Visual Studio Build Tools**
+    ```sh
+    winget install Microsoft.VisualStudio.2022.BuildTools
+    ```
+1. Modify **Visual Studio** to add **Visual C++ build tools**:
+    ```sh
+    & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe" modify `
+        --productId Microsoft.VisualStudio.Product.BuildTools `
+        --channelId VisualStudio.17.Release `
+        --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+        --add Microsoft.VisualStudio.Component.VC.Runtimes.x86.x64.Spectre `
+        --add Microsoft.VisualStudio.Component.Windows11SDK.26100 `
+    ```
+    or manually run **Visual Studio Installer** and select **Individual components**:
+    - MSVC v143 - VS 2022 C++ x64/x86 build tools (latest)
+    - MSVC v143 - VS 2022 C++ x64/x86 Spectre-Mitigated libs (latest)
+    - Windows 11 SDK
+1. If installation goes wrong try following a simple instruction from [node-gyp](https://github.com/nodejs/node-gyp#on-windows) (installs more than 12 GB)
+
+---
+
 # Native node module to access the Windows Registry
 This module only has what is needed to support VS Code and is intended to be a lightweight module.
 
