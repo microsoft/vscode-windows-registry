@@ -108,14 +108,17 @@ napi_value GetStringRegKey(napi_env env, napi_callback_info info) {
   DWORD dwBufferSize = sizeof(szBuffer);
   DWORD dwType = 0;
 
-  if (ERROR_SUCCESS == RegQueryValueEx(hKey, name.c_str(), 0, &dwType,
-                                       (LPBYTE)szBuffer, &dwBufferSize)) {
-    if (dwType == REG_SZ || dwType == REG_EXPAND_SZ) {
-      result.assign(szBuffer, strnlen(szBuffer, dwBufferSize));
-    }
-  }
+  LONG status = RegQueryValueEx(hKey, name.c_str(), 0, &dwType,
+                                (LPBYTE)szBuffer, &dwBufferSize);
 
   RegCloseKey(hKey);
+
+  if (status != ERROR_SUCCESS ||
+      (dwType != REG_SZ && dwType != REG_EXPAND_SZ)) {
+    return nullptr;
+  }
+
+  result.assign(szBuffer, strnlen(szBuffer, dwBufferSize));
 
   napi_value napi_result;
   napi_create_string_utf8(env, result.c_str(), result.length(), &napi_result);
