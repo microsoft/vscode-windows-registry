@@ -5,6 +5,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 #include <string>
+#include <cstring>
 #include <windows.h>
 
 #include <node_api.h>
@@ -63,6 +64,7 @@ napi_value GetStringRegKey(napi_env env, napi_callback_info info) {
   napi_get_value_string_utf8(env, argv[0], nullptr, 0, &str_len);
   if (str_len + 1 > MAX_LEN) {
     napi_throw_error(env, "EINVAL", "Arguments too long");
+    return nullptr;
   }
   std::string hive_arg;
   hive_arg.reserve(str_len + 1);
@@ -73,6 +75,7 @@ napi_value GetStringRegKey(napi_env env, napi_callback_info info) {
   napi_get_value_string_utf8(env, argv[1], nullptr, 0, &str_len);
   if (str_len + 1 > MAX_LEN) {
     napi_throw_error(env, "EINVAL", "Arguments too long");
+    return nullptr;
   }
   std::string path;
   path.reserve(str_len + 1);
@@ -82,6 +85,7 @@ napi_value GetStringRegKey(napi_env env, napi_callback_info info) {
   napi_get_value_string_utf8(env, argv[2], nullptr, 0, &str_len);
   if (str_len + 1 > MAX_LEN) {
     napi_throw_error(env, "EINVAL", "Arguments too long");
+    return nullptr;
   }
   std::string name;
   name.reserve(str_len + 1);
@@ -102,10 +106,13 @@ napi_value GetStringRegKey(napi_env env, napi_callback_info info) {
 
   char szBuffer[512];
   DWORD dwBufferSize = sizeof(szBuffer);
+  DWORD dwType = 0;
 
-  if (ERROR_SUCCESS == RegQueryValueEx(hKey, name.c_str(), 0, NULL,
+  if (ERROR_SUCCESS == RegQueryValueEx(hKey, name.c_str(), 0, &dwType,
                                        (LPBYTE)szBuffer, &dwBufferSize)) {
-    result = szBuffer;
+    if (dwType == REG_SZ || dwType == REG_EXPAND_SZ) {
+      result.assign(szBuffer, strnlen(szBuffer, dwBufferSize));
+    }
   }
 
   RegCloseKey(hKey);
@@ -144,6 +151,7 @@ napi_value GetDWORDRegKey(napi_env env, napi_callback_info info) {
   napi_get_value_string_utf8(env, argv[0], nullptr, 0, &str_len);
   if (str_len + 1 > MAX_LEN) {
     napi_throw_error(env, "EINVAL", "Arguments too long");
+    return nullptr;
   }
   std::string hive_arg;
   hive_arg.reserve(str_len + 1);
@@ -154,6 +162,7 @@ napi_value GetDWORDRegKey(napi_env env, napi_callback_info info) {
   napi_get_value_string_utf8(env, argv[1], nullptr, 0, &str_len);
   if (str_len + 1 > MAX_LEN) {
     napi_throw_error(env, "EINVAL", "Arguments too long");
+    return nullptr;
   }
   std::string path;
   path.reserve(str_len + 1);
@@ -163,6 +172,7 @@ napi_value GetDWORDRegKey(napi_env env, napi_callback_info info) {
   napi_get_value_string_utf8(env, argv[2], nullptr, 0, &str_len);
   if (str_len + 1 > MAX_LEN) {
     napi_throw_error(env, "EINVAL", "Arguments too long");
+    return nullptr;
   }
   std::string name;
   name.reserve(str_len + 1);
