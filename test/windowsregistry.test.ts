@@ -11,7 +11,12 @@ describe('Windows Registry Tests', () => {
 		describe('@GetStringRegKey', () => {
 			it('Retrieves the ProgramFilesPath registry value', () => {
 				const prgmFilesPath = GetStringRegKey('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft\\Windows\\CurrentVersion', 'ProgramFilesPath');
-				assert(prgmFilesPath === '%ProgramFiles%');
+				assert.strictEqual(prgmFilesPath, '%ProgramFiles%');
+			});
+
+			it('Returns undefined for a non-string registry value', () => {
+				const result = GetStringRegKey('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion', 'InstallDate');
+				assert.strictEqual(result, undefined);
 			});
 
 			it('Validates argument count', () => {
@@ -45,12 +50,17 @@ describe('Windows Registry Tests', () => {
 		describe('@GetDWORDRegKey', () => {
 			it('Retrieves a DWORD registry value', () => {
 				const result = GetDWORDRegKey('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion', 'InstallDate');
-				assert(result === undefined || typeof result === 'number');
+				assert.strictEqual(result === undefined || typeof result === 'number', true);
 			});
 
 			it('Returns undefined for non-existent value', () => {
 				const result = GetDWORDRegKey('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft\\Windows\\CurrentVersion', 'NonExistentDWORDValue12345');
-				assert(result === undefined);
+				assert.strictEqual(result, undefined);
+			});
+
+			it('Returns undefined for a non-DWORD registry value', () => {
+				const result = GetDWORDRegKey('HKEY_LOCAL_MACHINE', 'SOFTWARE\\Microsoft\\Windows\\CurrentVersion', 'ProgramFilesPath');
+				assert.strictEqual(result, undefined);
 			});
 
 			it('Validates argument count', () => {
